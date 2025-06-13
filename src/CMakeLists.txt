@@ -20,14 +20,17 @@ else()
                                 posix_time.c posix_thread.c)
 endif()
 
-add_custom_target(update_mappings
-    COMMAND "${CMAKE_COMMAND}" -P "${GLFW_SOURCE_DIR}/CMake/GenerateMappings.cmake" mappings.h.in mappings.h
-    WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
-    COMMENT "Updating gamepad mappings from upstream repository"
-    SOURCES mappings.h.in "${GLFW_SOURCE_DIR}/CMake/GenerateMappings.cmake"
-    VERBATIM)
+option(GLFW_UPDATE_MAPPINGS "Generate update_mappings target" ON)
+if (GLFW_UPDATE_MAPPINGS)
+    add_custom_target(update_mappings
+        COMMAND "${CMAKE_COMMAND}" -P "${GLFW_SOURCE_DIR}/CMake/GenerateMappings.cmake" mappings.h.in mappings.h
+        WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
+        COMMENT "Updating gamepad mappings from upstream repository"
+        SOURCES mappings.h.in "${GLFW_SOURCE_DIR}/CMake/GenerateMappings.cmake"
+        VERBATIM)
 
-set_target_properties(update_mappings PROPERTIES FOLDER "GLFW3")
+    set_target_properties(update_mappings PROPERTIES FOLDER "GLFW3")
+endif()
 
 if (GLFW_BUILD_COCOA)
     enable_language(OBJC)
